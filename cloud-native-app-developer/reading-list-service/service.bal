@@ -17,6 +17,7 @@
 import ballerina/uuid;
 import ballerina/http;
 import ballerina/jwt;
+import ballerina/log;
 
 enum Status {
     reading = "reading",
@@ -84,6 +85,8 @@ function getUsersBooks(http:Headers headers) returns map<Book>|http:BadRequest|e
             };
             return badRequest;
         }
+    
+        log:printInfo("Backend JWT :: " + jwtAssertion);
 
         [jwt:Header, jwt:Payload] [_, payload] = check jwt:decode(jwtAssertion);
         string username = payload.sub is string ? <string>payload.sub : DEFAULT_USER;
